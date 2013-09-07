@@ -3,7 +3,7 @@
 Plugin Name: Email Obfuscate Shortcode
 Plugin URI: http://wordpress.org/extend/plugins/email-obfuscate-shortcode
 Description: No more spam! Example usage: [email-obfuscate email="bob@company.com"] -- See plugin site for more examples.
-Version: 1.3.1
+Version: 1.4
 Author: khromov
 Author URI: http://khromov.wordpress.com
 License: GPL2
@@ -28,6 +28,11 @@ load_plugin_textdomain('email-obfuscate-shortcode', false, basename( dirname( __
  * Register the shortcode
  **/
 add_shortcode('email-obfuscate', array('EOS', 'obfuscate_shortcode'));
+
+/**
+ * Register Post Snippets integration
+ */
+add_filter('post_snippets_snippets_list', array('EOS', 'add_post_snippets_shortcode'), 20);
 
 /**
  * Function for calling EOS from other plugins.
@@ -185,5 +190,22 @@ class EOS
                 </script>";
                 
         return $ret;   
+    }
+
+    /** Add support for Post Snippets plugin **/
+    static function add_post_snippets_shortcode($snippets)
+    {
+        $eos_shortcode = array(
+            'title' => 'email-obfuscate',
+            'vars' => 'email,link_title,linkable=1',
+            'shortcode' => true,
+            'php' => true,
+            'wptexturize' => false,
+            'snippet' => '',
+            'description' => 'Email Obfuscate Shortcode'
+        );
+
+        array_push($snippets, $eos_shortcode);
+        return $snippets;
     }
 }
