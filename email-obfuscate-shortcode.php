@@ -3,7 +3,7 @@
 Plugin Name: Email Obfuscate Shortcode
 Plugin URI: http://wordpress.org/extend/plugins/email-obfuscate-shortcode
 Description: No more spam! Example usage: [email-obfuscate email="bob@company.com"] -- See plugin site for more examples.
-Version: 1.3
+Version: 1.3.1
 Author: khromov
 Author URI: http://khromov.wordpress.com
 License: GPL2
@@ -110,7 +110,7 @@ class EOS
             
             //Wrap in mailto: link
             if($linkable)
-                $ret = "<a href=\"mailto:{$ret}\">" . ($link_title=='' ? $ret : $link_title) ." </a>";
+                $ret = "<a href=\"mailto:{$ret}\">" . ($link_title=='' ? $ret : $link_title) ."</a>";
             
             //Convert to JS snippet
             $ret = EOS::safe_text($ret);

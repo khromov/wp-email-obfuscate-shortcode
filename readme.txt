@@ -3,7 +3,7 @@ Contributors: khromov
 Tags: email, obfuscator, email obfuscator, spam stopper
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPL2
 
 Obfuscate your email address or other sensitive information with a shortcode to prevent spam and automated harvesting of data.
@@ -84,6 +84,9 @@ This protection has been proven very effective. However it is theoretically poss
 2. Obfuscated JavaScript code as rendered to page
 
 == Changelog ==
+= 1.3.1 =
+* Fixed issue with additional space being added after email address. (Thanks to omdaddi)
+
 = 1.3 =
 * Fixed compatibility issue with PHP 5.2 (5.3 is still recommended)
 * Fixed a bug that made use_htmlentities setting not work. 
@@ -104,4 +107,4 @@ Initial release
 == TODO ==
 * Better noscript_fallback. Enable people without JavaScript to see the email address using technique to inject empty spans via css.
 (Example: bob@<span style="display:none">randomtext</span>company.com
-Reference: kolla på http://wordpress.org/extend/plugins/obfuscate-email/other_notes/
+Reference: http://wordpress.org/extend/plugins/obfuscate-email/other_notes/
