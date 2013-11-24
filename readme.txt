@@ -17,9 +17,13 @@ Obfuscate your email address or other sensitive information with a shortcode to 
 
 [email-obfuscate email="bob@example.com"]
 
-*Setting custom link title*
+*Setting custom link text*
 
 [email-obfuscate email="bob@example.com" link_title="Email Bob!"]
+
+*Setting custom link title attribute"
+
+[email-obfuscate email="bob@example.com" tag_title="Email Bob!"]
 
 *Using every available setting (this example shows their default values)*
 
@@ -85,7 +89,7 @@ This protection has been proven very effective. However it is theoretically poss
 
 == Changelog ==
 = 1.3.2 =
-* Added support for <a> title attribute
+* Added support for <a> title attribute via the tag_title="title" shortcode attribute.
 
 = 1.3.1 =
 * Fixed issue with additional space being added after email address. (Thanks to omdaddi)
