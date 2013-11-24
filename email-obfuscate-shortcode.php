@@ -3,7 +3,7 @@
 Plugin Name: Email Obfuscate Shortcode
 Plugin URI: http://wordpress.org/extend/plugins/email-obfuscate-shortcode
 Description: No more spam! Example usage: [email-obfuscate email="bob@company.com"] -- See plugin site for more examples.
-Version: 1.3.1
+Version: 1.3.2
 Author: khromov
 Author URI: http://khromov.wordpress.com
 License: GPL2
@@ -87,11 +87,12 @@ class EOS
                 array
                 (
         	       'email' => false,
-                   'linkable' => true, //0 if you want to store phones, names or other hidden information instead of emails 
+                   'linkable' => true, //0 if you want to store phones, names or other hidden information instead of emails
                    'link_title' => "",
                    'use_htmlentities' => true,
                    'use_noscript_fallback' => true,
-                   'noscript_message' => __("Please enable JavaScript to see this field.", "email-obfuscate-shortcode")
+                   'noscript_message' => __("Please enable JavaScript to see this field.", "email-obfuscate-shortcode"),
+				   'tag_title' => ''
                 ),
                 $args
             )
@@ -110,7 +111,7 @@ class EOS
             
             //Wrap in mailto: link
             if($linkable)
-                $ret = "<a href=\"mailto:{$ret}\">" . ($link_title=='' ? $ret : $link_title) ."</a>";
+			   $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
             
             //Convert to JS snippet
             $ret = EOS::safe_text($ret);
@@ -129,6 +130,7 @@ class EOS
                                 Link title: {$link_title} <br/>
                                 noscript fallback: {$use_noscript_fallback}<br/>
                                 noscript message: {$noscript_message}<br/>
+                                tag title: {$tag_title}<br/>
                                 --- End of EOS debug info ---
                             </div>
                         ";      

@@ -84,6 +84,9 @@ This protection has been proven very effective. However it is theoretically poss
 2. Obfuscated JavaScript code as rendered to page
 
 == Changelog ==
+= 1.3.2 =
+* Added support for <a> title attribute
+
 = 1.3.1 =
 * Fixed issue with additional space being added after email address. (Thanks to omdaddi)
 
