@@ -3,7 +3,7 @@
 Plugin Name: Email Obfuscate Shortcode
 Plugin URI: http://wordpress.org/extend/plugins/email-obfuscate-shortcode
 Description: No more spam! Example usage: [email-obfuscate email="bob@company.com"] -- See plugin site for more examples.
-Version: 1.3.3
+Version: 2.0
 Author: khromov
 Author URI: http://khromov.wordpress.com
 License: GPL2
@@ -176,14 +176,20 @@ class EOS
         foreach($chars as $char)
             $enc[] = ord($char)-$enc[sizeof($enc)-1];
         
-        $finished_array = join(',',$enc); 
-        
-        $ret = "<script type=\"text/javascript\">
+        $finished_array = join(',',$enc);
+
+		//Make a random div
+		$div = md5(rand().microtime());
+
+		$ret  = '<span id="'. $div .'"></span>';
+        $ret .= "<script type=\"text/javascript\">
                     var t=[{$finished_array}];
+                    var toAppend = '';
                     for (var i=1; i<t.length; i++)
                     {
-                        document.write(String.fromCharCode(t[i]+t[i-1])); 
+                    	toAppend+=String.fromCharCode(t[i]+t[i-1]);
                     }
+                    document.getElementById('". $div ."').innerHTML = toAppend;
                 </script>";
                 
         return $ret;   
