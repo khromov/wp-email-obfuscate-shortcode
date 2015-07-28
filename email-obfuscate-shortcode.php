@@ -101,17 +101,17 @@ class EOS
         if(!$email)
             return __("You have not entered an email address for this shortcode.", "email-obfuscate-shortcode");
         else
-        {        
+        {
             //Init return variable
             $ret = $email;
             
             //Encode as htmlentities
             if($use_htmlentities)
                 $ret = EOS::html_entities_all($ret);
-            
+
             //Wrap in mailto: link
             if($linkable)
-			   $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
+                $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
             
             //Convert to JS snippet
             $ret = EOS::safe_text($ret);
