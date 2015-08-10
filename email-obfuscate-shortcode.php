@@ -67,7 +67,7 @@ function eos_obfuscate($args)
 /**
  * Helper function
  *
- * @return string CSS class list of registered classes
+ * @return string CSS List of registered IDs
  */
 function eos_registered_ids_css()
 {
@@ -77,7 +77,7 @@ function eos_registered_ids_css()
 /**
  * Helper function
  *
- * @return array List of registered classes
+ * @return array List of registered IDs
  */
 function eos_registered_ids_array()
 {
@@ -89,7 +89,7 @@ function eos_registered_ids_array()
  **/
 class EOS
 {
-    static $classes = array();
+    static $ids = array();
 
     /**
      * Plugin activation function
@@ -211,7 +211,7 @@ class EOS
         $div = apply_filters('eos_random_div', ($charset[$id_in_charset] . md5(rand().microtime())));
 
         //Add the div to the global array
-        self::$classes[] = $div;
+        self::$ids[] = $div;
 
 		    $ret  = '<span id="'. $div .'" class="'. implode(' ', apply_filters('eos_span_classes', array())) .'"></span>';
         $ret .= "<script type=\"text/javascript\">
@@ -228,38 +228,38 @@ class EOS
     }
 
     /**
-     * Filter for grabbing all registered classes
+     * Filter for grabbing all registered IDs
      *
-     * @param $classes
+     * @param $ids
      * @return array
      */
-    static function registered_ids($classes)
+    static function registered_ids($ids)
     {
-        return self::$classes;
+        return self::$ids;
     }
 
     /**
-     * Grabs all currently outputted classes for CSS output
+     * Grabs all currently outputted IDs for CSS output
      *
-     * @return string CSS class list of registered classes
+     * @return string CSS selector of registered IDs
      */
     static function registered_ids_css()
     {
-        $classes = apply_filters('eos_registered_ids', array());
+        $ids = apply_filters('eos_registered_ids', array());
         $sb = '';
 
-        foreach($classes as $css_class)
+        foreach($ids as $css_id)
         {
-            $sb .= "#{$css_class} > a, ";
+            $sb .= "#{$css_id} > a, ";
         }
 
         return rtrim($sb, " ,");
     }
 
     /**
-     * Grabs all currently outputted classes as an array
+     * Grabs all currently outputted IDs as an array
      *
-     * @return array List of registered classes
+     * @return array List of registered IDs
      */
     static function registered_ids_array()
     {
