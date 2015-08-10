@@ -30,6 +30,11 @@ load_plugin_textdomain('email-obfuscate-shortcode', false, basename( dirname( __
 add_shortcode('email-obfuscate', array('EOS', 'obfuscate_shortcode'));
 
 /**
+ * Filter that grabs all registerd span ID:s
+ */
+add_filter('eos_registered_ids', array('EOS', 'registered_ids'));
+
+/**
  * Function for calling EOS from other plugins.
  * 
  * This is function is callable in any of your plugins.
@@ -60,10 +65,32 @@ function eos_obfuscate($args)
 }
 
 /**
+ * Helper function
+ *
+ * @return string CSS class list of registered classes
+ */
+function eos_registered_ids_css()
+{
+    return EOS::registered_ids_css();
+}
+
+/**
+ * Helper function
+ *
+ * @return array List of registered classes
+ */
+function eos_registered_ids_array()
+{
+    return EOS::registered_ids_array();
+}
+
+/**
  * Main class
  **/
 class EOS
 {
+    static $classes = array();
+
     /**
      * Plugin activation function
      **/
@@ -94,7 +121,7 @@ class EOS
                    'noscript_message' => __("Please enable JavaScript to see this field.", "email-obfuscate-shortcode"),
 				   'tag_title' => ''
                 ),
-                $args
+                apply_filters('eos_shortcode_settings', $args)
             )
         );
         
@@ -107,14 +134,14 @@ class EOS
             
             //Encode as htmlentities
             if($use_htmlentities)
-                $ret = EOS::html_entities_all($ret);
+                $ret = self::html_entities_all($ret);
 
             //Wrap in mailto: link
             if($linkable)
                 $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
             
             //Convert to JS snippet
-            $ret = EOS::safe_text($ret);
+            $ret = self::safe_text($ret);
                 
             //Add noscript fallback
             if($use_noscript_fallback)
@@ -167,21 +194,26 @@ class EOS
         //Check if text is UTF-8 and decode if it is
         if(mb_detect_encoding($text, 'UTF-8', true))
                 $text = utf8_decode($text);
-        
+
         //Create the obfuscation array
         $chars = str_split($text);
-    
+
         $enc[] = rand(0,255);
-    
+
         foreach($chars as $char)
             $enc[] = ord($char)-$enc[sizeof($enc)-1];
-        
+
         $finished_array = join(',',$enc);
 
-		//Make a random div
-		$div = md5(rand().microtime());
+        //Make a random div
+        $charset = 'abcdefghijklmnopqrstuvwxyz';
+        $id_in_charset = rand(0, 25);
+        $div = apply_filters('eos_random_div', ($charset[$id_in_charset] . md5(rand().microtime())));
 
-		$ret  = '<span id="'. $div .'"></span>';
+        //Add the div to the global array
+        self::$classes[] = $div;
+
+		    $ret  = '<span id="'. $div .'" class="'. implode(' ', apply_filters('eos_span_classes', array())) .'"></span>';
         $ret .= "<script type=\"text/javascript\">
                     var t=[{$finished_array}];
                     var toAppend = '';
@@ -193,5 +225,44 @@ class EOS
                 </script>";
                 
         return $ret;   
+    }
+
+    /**
+     * Filter for grabbing all registered classes
+     *
+     * @param $classes
+     * @return array
+     */
+    static function registered_ids($classes)
+    {
+        return self::$classes;
+    }
+
+    /**
+     * Grabs all currently outputted classes for CSS output
+     *
+     * @return string CSS class list of registered classes
+     */
+    static function registered_ids_css()
+    {
+        $classes = apply_filters('eos_registered_ids', array());
+        $sb = '';
+
+        foreach($classes as $css_class)
+        {
+            $sb .= "#{$css_class} > a, ";
+        }
+
+        return rtrim($sb, " ,");
+    }
+
+    /**
+     * Grabs all currently outputted classes as an array
+     *
+     * @return array List of registered classes
+     */
+    static function registered_ids_array()
+    {
+        return apply_filters('eos_registered_ids', array());
     }
 }
