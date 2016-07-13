@@ -10,7 +10,7 @@ php:
 
 install:
     - travis_retry composer self-update
-    - travis_retry composer install --no-interaction --prefer-source --dev -vvv
+    - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
     - vendor/bin/phpunit EOS_Test tests/tests.php --coverage-clover=coverage.xml
