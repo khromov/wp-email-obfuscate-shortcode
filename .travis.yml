@@ -1,6 +1,7 @@
 language: php
 
 php:
+    - 5.2
     - 5.3
     - 5.4
     - 5.5
@@ -8,12 +9,12 @@ php:
     - 7.0
     - hhvm
 
-install:
+#install:
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
-    - vendor/bin/phpunit --coverage-clover=coverage.xml
+    - vendor/bin/phpunit --coverage-clover=coverage.xml --syntax-check
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
