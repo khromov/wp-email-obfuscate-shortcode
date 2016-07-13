@@ -6,9 +6,9 @@ class EOS_Test extends PHPUnit_Framework_TestCase
 {
     // test the talk method
     public function testTest() {
-        $expected = 5;
+        $expected = array(1,2,3,4);
         $test = function() {
-            return 5;
+            return [1,2,3,4];
         };
         $this->assertEquals($expected, $test());
     }

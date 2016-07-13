@@ -1,0 +1,37 @@
+<filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+    </whitelist>
+</filter>
+
+<!--
+<phpunit backupGlobals="false"
+  backupStaticAttributes="false"
+  beStrictAboutTestsThatDoNotTestAnything="true"
+  beStrictAboutOutputDuringTests="true"
+  bootstrap="tests/bootstrap.php"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  failOnRisky="true"
+  failOnWarning="true"
+  processIsolation="false"
+  stopOnError="false"
+  stopOnFailure="false"
+  verbose="true"
+>
+  <testsuites>
+    <testsuite name="Papi Test Suite">
+      <directory suffix=".php">./tests/cases</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src</directory>
+    </whitelist>
+  </filter>
+  <logging>
+    <log type="coverage-clover" target="./tmp/clover.xml" charset="UTF-8" />
+  </logging>
+</phpunit>
+-->
