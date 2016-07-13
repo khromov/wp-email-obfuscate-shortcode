@@ -4,12 +4,13 @@
 
 class EOS_Test extends PHPUnit_Framework_TestCase
 {
-    // test the talk method
     public function testTest() {
-        $expected = array(1,2,3,4);
-        $test = function() {
-            return [1,2,3,4];
+        $expected = 6;
+
+        $test = function (int ...$ints) {
+            return array_sum($ints);
         };
-        $this->assertEquals($expected, $test());
+
+        $this->assertEquals($expected, $test(1,2,3));
     }
 }
