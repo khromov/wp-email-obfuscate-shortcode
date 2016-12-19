@@ -114,6 +114,7 @@ class EOS
                 array
                 (
         	       'email' => false,
+        	       'tel' => false,
                    'linkable' => true, //0 if you want to store phones, names or other hidden information instead of emails
                    'link_title' => "",
                    'use_htmlentities' => true,
@@ -125,9 +126,9 @@ class EOS
             )
         );
         
-        if(!$email)
-            return __("You have not entered an email address for this shortcode.", "email-obfuscate-shortcode");
-        else
+        if(!$email && !$tel)
+            return __("You have not entered an email address or telephone number for this shortcode.", "email-obfuscate-shortcode");
+        else if (!$tel)
         {
             //Init return variable
             $ret = $email;
@@ -164,6 +165,42 @@ class EOS
             }
             return $ret;
         }
+        else {
+			//Init return variable
+          $ret = $tel;
+          
+          //Encode as htmlentities
+          if($use_htmlentities)
+              $ret = EOS::html_entities_all($ret);
+          
+          //Wrap in mailto: link
+          if($linkable)
+			   $ret = '<a href="tel:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $tel : $link_title) .'</a>';
+          
+          //Convert to JS snippet
+          $ret = EOS::safe_text($ret);
+              
+          //Add noscript fallback
+          if($use_noscript_fallback)
+              $ret .= "<noscript>{$noscript_message}</noscript>"; 
+          
+          if(EOS_DEBUG)
+          {
+              $ret .= "
+                        <div class=\"eos_debug\">
+                           --- EOS debug info: --- <br />
+                           Raw email string: {$tel} <br/>
+                           Linkable: {$linkable} <br/>
+                           Link title: {$link_title} <br/>
+                           noscript fallback: {$use_noscript_fallback}<br/>
+                           noscript message: {$noscript_message}<br/>
+                           tag title: {$tag_title}<br/>
+                           --- End of EOS debug info ---
+                        </div>
+                    ";     
+          }
+          return $ret;
+		}
     }
     
     /**
