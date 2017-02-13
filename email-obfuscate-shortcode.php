@@ -128,10 +128,10 @@ class EOS
         
         if(!$email && !$tel)
             return __("You have not entered an email address or telephone number for this shortcode.", "email-obfuscate-shortcode");
-        else if (!$tel)
+        else 
         {
             //Init return variable
-            $ret = $email;
+            $ret = !$tel ? $email : $tel;
             
             //Encode as htmlentities
             if($use_htmlentities)
@@ -139,7 +139,7 @@ class EOS
 
             //Wrap in mailto: link
             if($linkable)
-                $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
+                $ret = '<a href="'.(!$tel ? 'mailto' : 'tel').':'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? (!$tel ? $email : $tel) : $link_title) .'</a>';
             
             //Convert to JS snippet
             $ret = self::safe_text($ret);
@@ -152,8 +152,7 @@ class EOS
             {
                 $ret .= "
                             <div class=\"eos_debug\">
-                                --- EOS debug info: --- <br />
-                                Raw email string: {$email} <br/>
+                                --- EOS debug info: --- <br />".(!$tel ? "Raw email string: {$email} <br/>" : "Raw tel string: {$tel}")."
                                 Linkable: {$linkable} <br/>
                                 Link title: {$link_title} <br/>
                                 noscript fallback: {$use_noscript_fallback}<br/>
@@ -165,42 +164,6 @@ class EOS
             }
             return $ret;
         }
-        else {
-			//Init return variable
-          $ret = $tel;
-          
-          //Encode as htmlentities
-          if($use_htmlentities)
-              $ret = EOS::html_entities_all($ret);
-          
-          //Wrap in mailto: link
-          if($linkable)
-			   $ret = '<a href="tel:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $tel : $link_title) .'</a>';
-          
-          //Convert to JS snippet
-          $ret = EOS::safe_text($ret);
-              
-          //Add noscript fallback
-          if($use_noscript_fallback)
-              $ret .= "<noscript>{$noscript_message}</noscript>"; 
-          
-          if(EOS_DEBUG)
-          {
-              $ret .= "
-                        <div class=\"eos_debug\">
-                           --- EOS debug info: --- <br />
-                           Raw email string: {$tel} <br/>
-                           Linkable: {$linkable} <br/>
-                           Link title: {$link_title} <br/>
-                           noscript fallback: {$use_noscript_fallback}<br/>
-                           noscript message: {$noscript_message}<br/>
-                           tag title: {$tag_title}<br/>
-                           --- End of EOS debug info ---
-                        </div>
-                    ";     
-          }
-          return $ret;
-		}
     }
     
     /**
