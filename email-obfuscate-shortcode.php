@@ -114,6 +114,7 @@ class EOS
                 array
                 (
         	       'email' => false,
+        	       'tel' => false,
                    'linkable' => true, //0 if you want to store phones, names or other hidden information instead of emails
                    'link_title' => "",
                    'use_htmlentities' => true,
@@ -125,12 +126,12 @@ class EOS
             )
         );
         
-        if(!$email)
-            return __("You have not entered an email address for this shortcode.", "email-obfuscate-shortcode");
-        else
+        if(!$email && !$tel)
+            return __("You have not entered an email address or telephone number for this shortcode.", "email-obfuscate-shortcode");
+        else 
         {
             //Init return variable
-            $ret = $email;
+            $ret = !$tel ? $email : $tel;
             
             //Encode as htmlentities
             if($use_htmlentities)
@@ -138,7 +139,7 @@ class EOS
 
             //Wrap in mailto: link
             if($linkable)
-                $ret = '<a href="mailto:'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? $email : $link_title) .'</a>';
+                $ret = '<a href="'.(!$tel ? 'mailto' : 'tel').':'.$ret.'"'. ($tag_title != '' ? (' title="'. $tag_title .'"') : '') .'>'. ($link_title=='' ? (!$tel ? $email : $tel) : $link_title) .'</a>';
             
             //Convert to JS snippet
             $ret = self::safe_text($ret);
@@ -151,8 +152,7 @@ class EOS
             {
                 $ret .= "
                             <div class=\"eos_debug\">
-                                --- EOS debug info: --- <br />
-                                Raw email string: {$email} <br/>
+                                --- EOS debug info: --- <br />".(!$tel ? "Raw email string: {$email} <br/>" : "Raw tel string: {$tel}")."
                                 Linkable: {$linkable} <br/>
                                 Link title: {$link_title} <br/>
                                 noscript fallback: {$use_noscript_fallback}<br/>
